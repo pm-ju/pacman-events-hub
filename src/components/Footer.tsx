@@ -71,7 +71,7 @@ const Footer = () => {
             © 2024 PIXELATE • HIGH SCORE: 999999
           </motion.p>
           <p className="text-[8px] text-muted-foreground mt-2">
-            GAME OVER? NEVER. INSERT COIN TO PLAY AGAIN.
+            Made with 🎮 for gamers and coders alike
           </p>
         </div>
       </div>
