@@ -36,7 +36,7 @@ const GhostEventCard = ({ title, time, venue, color, index }: GhostEventCardProp
       const centerY = rect.top + rect.height / 4;
       
       const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
-      const distance = Math.min(4, Math.hypot(e.clientX - centerX, e.clientY - centerY) / 50);
+      const distance = Math.min(6, Math.hypot(e.clientX - centerX, e.clientY - centerY) / 40);
       
       setEyePosition({
         x: Math.cos(angle) * distance,
@@ -60,28 +60,28 @@ const GhostEventCard = ({ title, time, venue, color, index }: GhostEventCardProp
     >
       {/* Ghost body */}
       <div className={`${colorMap[color]} rounded-t-full pt-8 pb-4 px-6 relative min-h-[200px]`}>
-        {/* Eyes container */}
-        <div className="flex justify-center gap-4 mb-6">
-          {/* Left eye */}
-          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center relative overflow-hidden">
+        {/* Eyes container - taller oval eyes with smaller pupils */}
+        <div className="flex justify-center gap-6 mb-6">
+          {/* Left eye - taller oval shape */}
+          <div className="w-10 h-14 bg-white rounded-full flex items-center justify-center relative overflow-hidden shadow-inner">
             <motion.div 
-              className="w-5 h-5 bg-blue-600 rounded-full absolute"
+              className="w-3 h-3 bg-blue-700 rounded-full absolute"
               animate={{
                 x: eyePosition.x,
                 y: eyePosition.y,
               }}
-              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 25 }}
             />
           </div>
-          {/* Right eye */}
-          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center relative overflow-hidden">
+          {/* Right eye - taller oval shape */}
+          <div className="w-10 h-14 bg-white rounded-full flex items-center justify-center relative overflow-hidden shadow-inner">
             <motion.div 
-              className="w-5 h-5 bg-blue-600 rounded-full absolute"
+              className="w-3 h-3 bg-blue-700 rounded-full absolute"
               animate={{
                 x: eyePosition.x,
                 y: eyePosition.y,
               }}
-              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 25 }}
             />
           </div>
         </div>
@@ -94,19 +94,21 @@ const GhostEventCard = ({ title, time, venue, color, index }: GhostEventCardProp
         </div>
       </div>
 
-      {/* Ghost wavy bottom */}
-      <div className={`${colorMap[color]} h-6 relative`}>
-        <svg 
-          className="absolute bottom-0 left-0 w-full" 
-          viewBox="0 0 100 20" 
+      {/* Ghost wavy bottom with animation */}
+      <div className={`${colorMap[color]} h-8 relative overflow-hidden`}>
+        <motion.svg 
+          className="absolute bottom-0 left-0 w-full h-full" 
+          viewBox="0 0 100 24" 
           preserveAspectRatio="none"
+          animate={{ x: [0, -10, 0] }}
+          transition={{ duration: 0.5, repeat: Infinity, ease: "easeInOut" }}
         >
           <path
-            d={`M0,0 L0,10 Q12.5,20 25,10 Q37.5,0 50,10 Q62.5,20 75,10 Q87.5,0 100,10 L100,0 Z`}
+            d={`M0,0 L0,12 Q10,24 20,12 Q30,0 40,12 Q50,24 60,12 Q70,0 80,12 Q90,24 100,12 L100,0 Z`}
             fill="currentColor"
             className={colorMap[color].replace('bg-', 'text-')}
           />
-        </svg>
+        </motion.svg>
       </div>
     </motion.div>
   );

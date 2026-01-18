@@ -10,16 +10,24 @@ interface Ghost {
   x: number;
   y: number;
   color: string;
-  dx: number;
-  dy: number;
+  pathIndex: number;
+  direction: number;
+  speed: number;
 }
 
 interface Pacman {
   x: number;
   y: number;
-  dx: number;
-  dy: number;
-  mouthOpen: boolean;
+  pathIndex: number;
+  direction: number;
+  speed: number;
+  mouthAngle: number;
+  mouthDirection: number;
+}
+
+interface PathPoint {
+  x: number;
+  y: number;
 }
 
 const PacmanBackground = () => {
@@ -50,50 +58,105 @@ const PacmanBackground = () => {
     canvas.width = dimensions.width;
     canvas.height = dimensions.height;
 
-    // Create dots grid
     const gridSize = 40;
-    const dots: Dot[] = [];
-    for (let x = gridSize; x < dimensions.width; x += gridSize) {
-      for (let y = gridSize; y < dimensions.height; y += gridSize) {
-        if (Math.random() > 0.3) {
-          dots.push({ x, y, eaten: false });
-        }
+    const cols = Math.floor(dimensions.width / gridSize);
+    const rows = Math.floor(dimensions.height / gridSize);
+
+    // Create maze paths - horizontal and vertical corridors
+    const paths: PathPoint[][] = [];
+    
+    // Create horizontal paths
+    for (let row = 2; row < rows - 1; row += 3) {
+      const path: PathPoint[] = [];
+      for (let col = 1; col < cols - 1; col++) {
+        path.push({ x: col * gridSize, y: row * gridSize });
       }
+      paths.push(path);
+    }
+    
+    // Create vertical paths
+    for (let col = 3; col < cols - 1; col += 4) {
+      const path: PathPoint[] = [];
+      for (let row = 1; row < rows - 1; row++) {
+        path.push({ x: col * gridSize, y: row * gridSize });
+      }
+      paths.push(path);
     }
 
-    // Create ghosts
+    // Create dots along paths
+    const dots: Dot[] = [];
+    paths.forEach(path => {
+      path.forEach((point, i) => {
+        if (i % 2 === 0) {
+          dots.push({ x: point.x, y: point.y, eaten: false });
+        }
+      });
+    });
+
+    // Create ghosts with path-following behavior
     const ghostColors = ['#FF0000', '#FFB8FF', '#00FFFF', '#FFB852'];
-    const ghosts: Ghost[] = ghostColors.map((color, i) => ({
-      x: Math.random() * dimensions.width,
-      y: Math.random() * dimensions.height,
-      color,
-      dx: (Math.random() - 0.5) * 2,
-      dy: (Math.random() - 0.5) * 2,
-    }));
+    const ghosts: Ghost[] = ghostColors.map((color, i) => {
+      const pathIndex = i % paths.length;
+      const pointIndex = Math.floor(paths[pathIndex].length / 2);
+      return {
+        x: paths[pathIndex][pointIndex].x,
+        y: paths[pathIndex][pointIndex].y,
+        color,
+        pathIndex,
+        direction: Math.random() > 0.5 ? 1 : -1,
+        speed: 0.8 + Math.random() * 0.4,
+      };
+    });
 
     // Create Pac-Man
     const pacman: Pacman = {
-      x: dimensions.width / 4,
-      y: dimensions.height / 2,
-      dx: 2,
-      dy: 0,
-      mouthOpen: true,
+      x: paths[0][0].x,
+      y: paths[0][0].y,
+      pathIndex: 0,
+      direction: 1,
+      speed: 1.2,
+      mouthAngle: 0,
+      mouthDirection: 1,
     };
 
-    let frameCount = 0;
+    let pathProgress: { [key: number]: number } = {};
+    ghosts.forEach((_, i) => pathProgress[i] = Math.floor(paths[i % paths.length].length / 2));
+    let pacmanProgress = 0;
+
+    const drawMaze = () => {
+      ctx.strokeStyle = 'rgba(0, 100, 255, 0.2)';
+      ctx.lineWidth = 2;
+      
+      paths.forEach(path => {
+        ctx.beginPath();
+        ctx.moveTo(path[0].x, path[0].y);
+        for (let i = 1; i < path.length; i++) {
+          ctx.lineTo(path[i].x, path[i].y);
+        }
+        ctx.stroke();
+      });
+    };
 
     const drawPacman = (p: Pacman) => {
       ctx.save();
       ctx.translate(p.x, p.y);
       
-      const angle = Math.atan2(p.dy, p.dx);
-      ctx.rotate(angle);
+      // Determine rotation based on movement
+      const nextPoint = paths[p.pathIndex]?.[Math.floor(pacmanProgress) + p.direction];
+      if (nextPoint) {
+        const angle = Math.atan2(nextPoint.y - p.y, nextPoint.x - p.x);
+        ctx.rotate(angle);
+      }
       
+      // Draw Pac-Man with smooth mouth animation
       ctx.fillStyle = '#FFFF00';
-      ctx.beginPath();
+      ctx.shadowColor = 'rgba(255, 255, 0, 0.5)';
+      ctx.shadowBlur = 15;
       
-      const mouthAngle = p.mouthOpen ? 0.3 : 0.05;
-      ctx.arc(0, 0, 15, mouthAngle * Math.PI, (2 - mouthAngle) * Math.PI);
+      const mouthAngle = p.mouthAngle * Math.PI;
+      
+      ctx.beginPath();
+      ctx.arc(0, 0, 18, mouthAngle, 2 * Math.PI - mouthAngle);
       ctx.lineTo(0, 0);
       ctx.closePath();
       ctx.fill();
@@ -102,18 +165,21 @@ const PacmanBackground = () => {
     };
 
     const drawGhost = (ghost: Ghost) => {
-      const size = 20;
+      const size = 18;
       ctx.fillStyle = ghost.color;
+      ctx.shadowColor = ghost.color;
+      ctx.shadowBlur = 10;
       
-      // Body
+      // Ghost body - rounded top
       ctx.beginPath();
-      ctx.arc(ghost.x, ghost.y - size/3, size, Math.PI, 0);
+      ctx.arc(ghost.x, ghost.y - size/4, size, Math.PI, 0);
       ctx.lineTo(ghost.x + size, ghost.y + size/2);
       
-      // Wavy bottom
-      for (let i = 0; i < 4; i++) {
+      // Wavy bottom with animation
+      const waveOffset = Date.now() * 0.01;
+      for (let i = 0; i <= 4; i++) {
         const waveX = ghost.x + size - (i * size / 2);
-        const waveY = ghost.y + size/2 + (i % 2 === 0 ? 5 : 0);
+        const waveY = ghost.y + size/2 + Math.sin(waveOffset + i) * 3;
         ctx.lineTo(waveX, waveY);
       }
       
@@ -121,86 +187,101 @@ const PacmanBackground = () => {
       ctx.closePath();
       ctx.fill();
       
-      // Eyes
+      ctx.shadowBlur = 0;
+      
+      // Eyes - taller and oval shaped
       ctx.fillStyle = 'white';
       ctx.beginPath();
-      ctx.arc(ghost.x - 6, ghost.y - size/3, 5, 0, Math.PI * 2);
-      ctx.arc(ghost.x + 6, ghost.y - size/3, 5, 0, Math.PI * 2);
+      ctx.ellipse(ghost.x - 6, ghost.y - size/4, 5, 7, 0, 0, Math.PI * 2);
+      ctx.ellipse(ghost.x + 6, ghost.y - size/4, 5, 7, 0, 0, Math.PI * 2);
       ctx.fill();
       
+      // Pupils - smaller and follow mouse direction would need mouse tracking
       ctx.fillStyle = '#0000FF';
       ctx.beginPath();
-      ctx.arc(ghost.x - 5, ghost.y - size/3, 2.5, 0, Math.PI * 2);
-      ctx.arc(ghost.x + 7, ghost.y - size/3, 2.5, 0, Math.PI * 2);
+      ctx.arc(ghost.x - 5 + ghost.direction * 2, ghost.y - size/4, 2, 0, Math.PI * 2);
+      ctx.arc(ghost.x + 7 + ghost.direction * 2, ghost.y - size/4, 2, 0, Math.PI * 2);
       ctx.fill();
     };
 
     const drawDot = (dot: Dot) => {
       if (dot.eaten) return;
       ctx.fillStyle = '#FFFF00';
+      ctx.shadowColor = 'rgba(255, 255, 0, 0.5)';
+      ctx.shadowBlur = 5;
       ctx.beginPath();
       ctx.arc(dot.x, dot.y, 4, 0, Math.PI * 2);
       ctx.fill();
+      ctx.shadowBlur = 0;
     };
 
     const animate = () => {
-      ctx.fillStyle = 'rgba(0, 0, 10, 0.1)';
+      // Clear with fade effect
+      ctx.fillStyle = 'rgba(0, 0, 10, 0.15)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Draw maze pattern
-      ctx.strokeStyle = 'rgba(0, 100, 255, 0.1)';
-      ctx.lineWidth = 1;
-      for (let x = 0; x < canvas.width; x += 40) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
-        ctx.stroke();
-      }
-      for (let y = 0; y < canvas.height; y += 40) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-        ctx.stroke();
-      }
+      // Draw maze paths
+      drawMaze();
 
-      // Draw and animate dots
+      // Draw dots
       dots.forEach(drawDot);
 
-      // Animate and draw ghosts
-      ghosts.forEach(ghost => {
-        ghost.x += ghost.dx;
-        ghost.y += ghost.dy;
+      // Animate ghosts along paths
+      ghosts.forEach((ghost, i) => {
+        const path = paths[ghost.pathIndex];
+        const progress = pathProgress[i] ?? 0;
         
-        if (ghost.x < 0 || ghost.x > dimensions.width) ghost.dx *= -1;
-        if (ghost.y < 0 || ghost.y > dimensions.height) ghost.dy *= -1;
+        // Move along path
+        pathProgress[i] = progress + ghost.direction * ghost.speed * 0.05;
+        
+        // Reverse at path ends
+        if (pathProgress[i] >= path.length - 1 || pathProgress[i] <= 0) {
+          ghost.direction *= -1;
+          // Occasionally switch to a different path at intersections
+          if (Math.random() > 0.7) {
+            const newPathIndex = Math.floor(Math.random() * paths.length);
+            ghost.pathIndex = newPathIndex;
+            pathProgress[i] = Math.floor(paths[newPathIndex].length / 2);
+          }
+        }
+        
+        // Interpolate position along path
+        const idx = Math.floor(Math.max(0, Math.min(path.length - 1, pathProgress[i])));
+        const nextIdx = Math.min(path.length - 1, idx + 1);
+        const t = pathProgress[i] - idx;
+        
+        ghost.x = path[idx].x + (path[nextIdx].x - path[idx].x) * t;
+        ghost.y = path[idx].y + (path[nextIdx].y - path[idx].y) * t;
         
         drawGhost(ghost);
       });
 
       // Animate Pac-Man
-      pacman.x += pacman.dx;
-      pacman.y += pacman.dy;
+      const currentPath = paths[pacman.pathIndex];
+      pacmanProgress += pacman.direction * pacman.speed * 0.05;
       
-      if (pacman.x > dimensions.width + 20) {
-        pacman.x = -20;
-        pacman.y = Math.random() * dimensions.height;
+      if (pacmanProgress >= currentPath.length - 1 || pacmanProgress <= 0) {
+        pacman.direction *= -1;
+        // Switch paths at intersections
+        if (Math.random() > 0.5) {
+          pacman.pathIndex = Math.floor(Math.random() * paths.length);
+          pacmanProgress = pacman.direction > 0 ? 0 : paths[pacman.pathIndex].length - 1;
+        }
       }
-      if (pacman.x < -20) pacman.x = dimensions.width + 20;
-      if (pacman.y > dimensions.height + 20 || pacman.y < -20) {
-        pacman.y = Math.random() * dimensions.height;
-      }
-
-      // Change direction occasionally
-      if (frameCount % 200 === 0) {
-        const directions = [[2, 0], [-2, 0], [0, 2], [0, -2]];
-        const dir = directions[Math.floor(Math.random() * directions.length)];
-        pacman.dx = dir[0];
-        pacman.dy = dir[1];
-      }
-
-      // Mouth animation
-      if (frameCount % 10 === 0) {
-        pacman.mouthOpen = !pacman.mouthOpen;
+      
+      const idx = Math.floor(Math.max(0, Math.min(currentPath.length - 1, pacmanProgress)));
+      const nextIdx = Math.min(currentPath.length - 1, idx + 1);
+      const t = pacmanProgress - idx;
+      
+      pacman.x = currentPath[idx].x + (currentPath[nextIdx].x - currentPath[idx].x) * t;
+      pacman.y = currentPath[idx].y + (currentPath[nextIdx].y - currentPath[idx].y) * t;
+      
+      // Smooth mouth animation - open and close smoothly
+      pacman.mouthAngle += pacman.mouthDirection * 0.08;
+      if (pacman.mouthAngle >= 0.25) {
+        pacman.mouthDirection = -1;
+      } else if (pacman.mouthAngle <= 0.02) {
+        pacman.mouthDirection = 1;
       }
 
       // Eat dots
@@ -208,14 +289,12 @@ const PacmanBackground = () => {
         const dist = Math.hypot(pacman.x - dot.x, pacman.y - dot.y);
         if (dist < 20 && !dot.eaten) {
           dot.eaten = true;
-          // Respawn dot after delay
-          setTimeout(() => { dot.eaten = false; }, 5000);
+          setTimeout(() => { dot.eaten = false; }, 8000);
         }
       });
 
       drawPacman(pacman);
 
-      frameCount++;
       animationRef.current = requestAnimationFrame(animate);
     };
 
@@ -231,7 +310,7 @@ const PacmanBackground = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none opacity-40"
+      className="fixed inset-0 pointer-events-none opacity-50"
       style={{ zIndex: 0 }}
     />
   );
