@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,94 +6,81 @@
 
 @layer base {
   :root {
-    /* Pac-Man Arcade Theme */
-    --background: 240 100% 3%;
-    --foreground: 60 100% 50%;
+    /* Storybook Theme - Warm Leather & Aged Paper */
+    --background: 30 20% 10%;
+    --foreground: 35 30% 85%;
 
-    --card: 240 100% 6%;
-    --card-foreground: 60 100% 50%;
+    --card: 30 25% 15%;
+    --card-foreground: 35 30% 90%;
 
-    --popover: 240 100% 6%;
-    --popover-foreground: 60 100% 50%;
+    --popover: 30 25% 12%;
+    --popover-foreground: 35 30% 90%;
 
-    /* Pac-Man Yellow */
-    --primary: 60 100% 50%;
-    --primary-foreground: 240 100% 3%;
+    /* Gold accent */
+    --primary: 43 74% 49%;
+    --primary-foreground: 30 20% 10%;
 
-    /* Maze Blue */
-    --secondary: 220 100% 50%;
-    --secondary-foreground: 60 100% 50%;
+    /* Deep burgundy */
+    --secondary: 350 50% 35%;
+    --secondary-foreground: 35 30% 90%;
 
-    /* Dark arcade surface */
-    --muted: 240 50% 10%;
-    --muted-foreground: 220 100% 70%;
+    /* Aged paper */
+    --muted: 35 20% 20%;
+    --muted-foreground: 35 20% 60%;
 
-    /* Neon accent */
-    --accent: 180 100% 50%;
-    --accent-foreground: 240 100% 3%;
+    /* Copper accent */
+    --accent: 25 60% 45%;
+    --accent-foreground: 35 30% 95%;
 
-    /* Ghost Red */
-    --destructive: 0 100% 50%;
+    --destructive: 0 65% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 100% 30%;
-    --input: 220 100% 30%;
-    --ring: 60 100% 50%;
+    --border: 30 30% 25%;
+    --input: 30 30% 25%;
+    --ring: 43 74% 49%;
 
-    --radius: 0.25rem;
+    --radius: 0.5rem;
 
-    /* Ghost Colors */
-    --ghost-red: 0 100% 50%;
-    --ghost-pink: 330 100% 70%;
-    --ghost-cyan: 180 100% 50%;
-    --ghost-orange: 30 100% 50%;
+    /* Storybook specific colors */
+    --leather: 25 40% 20%;
+    --leather-dark: 25 40% 12%;
+    --paper: 40 30% 88%;
+    --paper-dark: 40 25% 75%;
+    --gold: 43 74% 49%;
+    --gold-light: 43 80% 65%;
+    --wood: 30 35% 25%;
+    --wood-dark: 30 35% 15%;
 
-    /* Neon Glows */
-    --glow-yellow: 0 0 20px hsl(60 100% 50% / 0.8), 0 0 40px hsl(60 100% 50% / 0.4);
-    --glow-blue: 0 0 20px hsl(220 100% 50% / 0.8), 0 0 40px hsl(220 100% 50% / 0.4);
-    --glow-cyan: 0 0 20px hsl(180 100% 50% / 0.8), 0 0 40px hsl(180 100% 50% / 0.4);
-
-    /* Maze pattern */
-    --maze-color: 220 100% 40%;
-
-    --sidebar-background: 240 100% 5%;
-    --sidebar-foreground: 60 100% 50%;
-    --sidebar-primary: 60 100% 50%;
-    --sidebar-primary-foreground: 240 100% 3%;
-    --sidebar-accent: 220 100% 50%;
-    --sidebar-accent-foreground: 60 100% 50%;
-    --sidebar-border: 220 100% 30%;
-    --sidebar-ring: 60 100% 50%;
+    --sidebar-background: 30 25% 12%;
+    --sidebar-foreground: 35 30% 85%;
+    --sidebar-primary: 43 74% 49%;
+    --sidebar-primary-foreground: 30 20% 10%;
+    --sidebar-accent: 25 60% 45%;
+    --sidebar-accent-foreground: 35 30% 95%;
+    --sidebar-border: 30 30% 25%;
+    --sidebar-ring: 43 74% 49%;
   }
 
   .dark {
-    --background: 240 100% 3%;
-    --foreground: 60 100% 50%;
-    --card: 240 100% 6%;
-    --card-foreground: 60 100% 50%;
-    --popover: 240 100% 6%;
-    --popover-foreground: 60 100% 50%;
-    --primary: 60 100% 50%;
-    --primary-foreground: 240 100% 3%;
-    --secondary: 220 100% 50%;
-    --secondary-foreground: 60 100% 50%;
-    --muted: 240 50% 10%;
-    --muted-foreground: 220 100% 70%;
-    --accent: 180 100% 50%;
-    --accent-foreground: 240 100% 3%;
-    --destructive: 0 100% 50%;
+    --background: 30 20% 8%;
+    --foreground: 35 30% 85%;
+    --card: 30 25% 12%;
+    --card-foreground: 35 30% 90%;
+    --popover: 30 25% 10%;
+    --popover-foreground: 35 30% 90%;
+    --primary: 43 74% 49%;
+    --primary-foreground: 30 20% 10%;
+    --secondary: 350 50% 35%;
+    --secondary-foreground: 35 30% 90%;
+    --muted: 35 20% 18%;
+    --muted-foreground: 35 20% 55%;
+    --accent: 25 60% 45%;
+    --accent-foreground: 35 30% 95%;
+    --destructive: 0 65% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 100% 30%;
-    --input: 220 100% 30%;
-    --ring: 60 100% 50%;
-    --sidebar-background: 240 100% 5%;
-    --sidebar-foreground: 60 100% 50%;
-    --sidebar-primary: 60 100% 50%;
-    --sidebar-primary-foreground: 240 100% 3%;
-    --sidebar-accent: 220 100% 50%;
-    --sidebar-accent-foreground: 60 100% 50%;
-    --sidebar-border: 220 100% 30%;
-    --sidebar-ring: 60 100% 50%;
+    --border: 30 30% 22%;
+    --input: 30 30% 22%;
+    --ring: 43 74% 49%;
   }
 }
 
@@ -104,93 +91,151 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'Cormorant Garamond', serif;
   }
 }
 
 @layer utilities {
-  .font-arcade {
-    font-family: 'Press Start 2P', cursive;
+  .font-display {
+    font-family: 'Playfair Display', serif;
   }
 
-  .text-glow-yellow {
-    text-shadow: var(--glow-yellow);
+  .font-script {
+    font-family: 'Great Vibes', cursive;
   }
 
-  .text-glow-blue {
-    text-shadow: var(--glow-blue);
+  .font-body {
+    font-family: 'Cormorant Garamond', serif;
   }
 
-  .text-glow-cyan {
-    text-shadow: var(--glow-cyan);
-  }
-
-  .box-glow-yellow {
-    box-shadow: var(--glow-yellow);
-  }
-
-  .box-glow-blue {
-    box-shadow: var(--glow-blue);
-  }
-
-  .neon-border {
-    border: 3px solid hsl(var(--secondary));
+  /* Leather texture effect */
+  .leather-texture {
+    background: 
+      radial-gradient(ellipse at 20% 30%, hsl(var(--leather)) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 70%, hsl(var(--leather-dark)) 0%, transparent 50%),
+      linear-gradient(135deg, hsl(var(--leather)) 0%, hsl(var(--leather-dark)) 100%);
     box-shadow: 
-      inset 0 0 10px hsl(var(--secondary) / 0.3),
-      0 0 10px hsl(var(--secondary) / 0.5),
-      0 0 20px hsl(var(--secondary) / 0.3);
+      inset 0 0 100px rgba(0,0,0,0.5),
+      inset 0 -5px 20px rgba(0,0,0,0.3);
   }
 
-  .pacman-chomp {
-    animation: chomp 0.3s infinite;
+  /* Paper texture effect */
+  .paper-texture {
+    background: 
+      linear-gradient(135deg, hsl(var(--paper)) 0%, hsl(var(--paper-dark)) 100%);
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.1);
   }
 
-  @keyframes chomp {
-    0%, 100% {
-      clip-path: polygon(100% 50%, 75% 0%, 0% 0%, 0% 100%, 75% 100%);
-    }
-    50% {
-      clip-path: polygon(100% 50%, 50% 25%, 0% 0%, 0% 100%, 50% 75%);
-    }
+  /* Wood grain effect */
+  .wood-texture {
+    background: 
+      repeating-linear-gradient(
+        90deg,
+        hsl(var(--wood)) 0px,
+        hsl(var(--wood-dark)) 2px,
+        hsl(var(--wood)) 4px
+      ),
+      linear-gradient(180deg, hsl(var(--wood)) 0%, hsl(var(--wood-dark)) 100%);
   }
 
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+  /* Gold emboss effect */
+  .gold-emboss {
+    color: hsl(var(--gold));
+    text-shadow: 
+      1px 1px 2px rgba(0,0,0,0.5),
+      0 0 20px hsl(var(--gold) / 0.3);
   }
 
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
+  .gold-glow {
+    box-shadow: 
+      0 0 20px hsl(var(--gold) / 0.4),
+      0 0 40px hsl(var(--gold) / 0.2);
   }
 
-  @keyframes pulse-glow {
-    0%, 100% { 
-      filter: drop-shadow(0 0 10px hsl(var(--primary) / 0.8));
-    }
-    50% { 
-      filter: drop-shadow(0 0 25px hsl(var(--primary) / 1));
-    }
+  /* Page flip animation */
+  @keyframes page-flip {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(-180deg); }
   }
 
-  .animate-pulse-glow {
-    animation: pulse-glow 2s ease-in-out infinite;
+  .animate-page-flip {
+    animation: page-flip 0.8s ease-in-out forwards;
+    transform-origin: left center;
   }
 
-  .maze-pattern {
-    background-image: 
-      linear-gradient(hsl(var(--maze-color) / 0.3) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(var(--maze-color) / 0.3) 1px, transparent 1px);
-    background-size: 30px 30px;
+  /* Warm spotlight effect */
+  .warm-spotlight {
+    background: radial-gradient(
+      ellipse at center,
+      hsl(40 50% 50% / 0.1) 0%,
+      transparent 70%
+    );
   }
 
-  .scanlines {
-    background: repeating-linear-gradient(
+  /* Aged paper lines */
+  .paper-lines {
+    background-image: repeating-linear-gradient(
       0deg,
       transparent,
-      transparent 2px,
-      hsl(0 0% 0% / 0.1) 2px,
-      hsl(0 0% 0% / 0.1) 4px
+      transparent 28px,
+      hsl(var(--paper-dark) / 0.5) 28px,
+      hsl(var(--paper-dark) / 0.5) 29px
     );
-    pointer-events: none;
+  }
+
+  /* Book spine shadow */
+  .book-spine-shadow {
+    box-shadow: 
+      inset 10px 0 30px rgba(0,0,0,0.4),
+      inset -2px 0 10px rgba(255,255,255,0.1);
+  }
+
+  /* Floating animation for subtle movement */
+  @keyframes gentle-float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-5px) rotate(0.5deg); }
+  }
+
+  .animate-gentle-float {
+    animation: gentle-float 4s ease-in-out infinite;
+  }
+
+  /* Shimmer effect for gold elements */
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--gold)) 0%,
+      hsl(var(--gold-light)) 50%,
+      hsl(var(--gold)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  /* Decorative corner flourish placeholder */
+  .corner-flourish::before,
+  .corner-flourish::after {
+    content: '❧';
+    position: absolute;
+    font-size: 2rem;
+    color: hsl(var(--gold) / 0.6);
+  }
+
+  .corner-flourish::before {
+    top: 1rem;
+    left: 1rem;
+  }
+
+  .corner-flourish::after {
+    bottom: 1rem;
+    right: 1rem;
+    transform: rotate(180deg);
   }
 }
