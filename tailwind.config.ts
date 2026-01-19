@@ -14,7 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        arcade: ['"Press Start 2P"', 'cursive'],
+        display: ['"Playfair Display"', 'serif'],
+        script: ['"Great Vibes"', 'cursive'],
+        body: ['"Cormorant Garamond"', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -50,13 +52,14 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        ghost: {
-          red: "hsl(var(--ghost-red))",
-          pink: "hsl(var(--ghost-pink))",
-          cyan: "hsl(var(--ghost-cyan))",
-          orange: "hsl(var(--ghost-orange))",
-        },
-        maze: "hsl(var(--maze-color))",
+        leather: "hsl(var(--leather))",
+        "leather-dark": "hsl(var(--leather-dark))",
+        paper: "hsl(var(--paper))",
+        "paper-dark": "hsl(var(--paper-dark))",
+        gold: "hsl(var(--gold))",
+        "gold-light": "hsl(var(--gold-light))",
+        wood: "hsl(var(--wood))",
+        "wood-dark": "hsl(var(--wood-dark))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -82,20 +85,30 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "dot-blink": {
-          "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.3" },
+        "page-turn": {
+          "0%": { transform: "rotateY(0deg)" },
+          "100%": { transform: "rotateY(-180deg)" },
         },
-        "ghost-float": {
-          "0%, 100%": { transform: "translateY(0) scaleY(1)" },
-          "50%": { transform: "translateY(-5px) scaleY(0.95)" },
+        "book-open": {
+          "0%": { transform: "perspective(1500px) rotateX(30deg) scale(0.8)" },
+          "100%": { transform: "perspective(1500px) rotateX(0deg) scale(1)" },
+        },
+        "fade-up": {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "orbit": {
+          "0%": { transform: "rotate(0deg) translateX(150px) rotate(0deg)" },
+          "100%": { transform: "rotate(360deg) translateX(150px) rotate(-360deg)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "dot-blink": "dot-blink 1s ease-in-out infinite",
-        "ghost-float": "ghost-float 2s ease-in-out infinite",
+        "page-turn": "page-turn 0.8s ease-in-out forwards",
+        "book-open": "book-open 1.5s ease-out forwards",
+        "fade-up": "fade-up 0.6s ease-out forwards",
+        "orbit": "orbit 20s linear infinite",
       },
     },
   },
